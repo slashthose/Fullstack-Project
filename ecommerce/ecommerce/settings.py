@@ -35,9 +35,10 @@ RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "fullstack-project-u0mo2jntp-slashthoses-projects.vercel.app",
+    "localhost",
+    "127.0.0.1",
+    ".vercel.app",
 ]
-
 
 # Application definition
 
