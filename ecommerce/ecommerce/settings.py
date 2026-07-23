@@ -88,21 +88,6 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-<<<<<<< HEAD
-=======
-import dj_database_url
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
-}
->>>>>>> 1f84430 (Update settings and add media images)
-
 
 DATABASES = {
     'default': dj_database_url.config(
