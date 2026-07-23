@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account | C-Style</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --cream: #f7f4ee;
+        --cream-deep: #efe9de;
+        --black: #15130f;
+        --ink: #2a2621;
+        --taupe: #8c8375;
+        --taupe-light: #b8af9f;
+        --line: #e4dece;
+        --white: #ffffff;
+        --error: #b3392c;
+        --success: #4c7a5c;
+        --radius-sm: 4px;
+        --radius-md: 10px;
+        --radius-lg: 22px;
+        --maxw: 1320px;
+        --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        color: var(--ink);
+        background: var(--cream);
+        -webkit-font-smoothing: antialiased;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: "Playfair Display", serif;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--taupe);
+        font-weight: 600;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 15px 30px;
+        font-size: 13px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 600;
+        border-radius: 2px;
+        border: 1.5px solid var(--black);
+        transition:
+          background 0.25s var(--ease),
+          color 0.25s var(--ease),
+          transform 0.2s var(--ease);
+        white-space: nowrap;
+      }
+      .btn-fill {
+        background: var(--black);
+        color: var(--white);
+        width: 100%;
+      }
+      .btn-fill:hover {
+        background: var(--ink);
+        transform: translateY(-2px);
+      }
+      .btn-fill:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* ---------- Simple top bar ---------- */
+      .top-bar {
+        border-bottom: 1px solid var(--line);
+        background: var(--cream);
+      }
+      .top-bar-inner {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 0 40px;
+        height: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "Playfair Display", serif;
+        font-size: 23px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+      }
+      .logo .mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1.5px solid var(--black);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        font-style: italic;
+      }
+      .back-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12.5px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--taupe);
+        transition: color 0.2s;
+      }
+      .back-link:hover {
+        color: var(--black);
+      }
+
+      /* ---------- Auth layout ---------- */
+      .auth-shell {
+        min-height: calc(100vh - 83px);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      .auth-media {
+        position: relative;
+        background: var(--cream-deep);
+      }
+      .auth-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .auth-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(21, 19, 15, 0.55),
+          rgba(21, 19, 15, 0) 55%
+        );
+      }
+      .auth-media-copy {
+        position: absolute;
+        left: 44px;
+        right: 44px;
+        bottom: 48px;
+        color: var(--white);
+        z-index: 1;
+      }
+      .auth-media-copy .eyebrow {
+        color: var(--taupe-light);
+      }
+      .auth-media-copy h2 {
+        font-size: 30px;
+        margin-top: 12px;
+        line-height: 1.25;
+        font-weight: 600;
+      }
+      .auth-form-side {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px 40px;
+      }
+      .auth-form-wrap {
+        width: 100%;
+        max-width: 420px;
+      }
+      .auth-form-wrap h1 {
+        font-size: 34px;
+        font-weight: 700;
+      }
+      .auth-form-wrap .sub {
+        font-size: 14px;
+        color: var(--taupe);
+        margin-top: 10px;
+        line-height: 1.6;
+      }
+      .auth-form-wrap .sub a {
+        color: var(--black);
+        font-weight: 600;
+        border-bottom: 1px solid var(--black);
+      }
+
+      .alert {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        background: #fbecea;
+        border: 1px solid #e6c3bd;
+        color: var(--error);
+        font-size: 12.5px;
+        padding: 12px 14px;
+        border-radius: var(--radius-sm);
+        margin: 26px 0 0;
+        line-height: 1.5;
+      }
+
+      form.auth-form {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .field label {
+        font-size: 11.5px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+      .field .input-shell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        padding: 13px 16px;
+        transition: border-color 0.2s;
+      }
+      .field .input-shell:focus-within {
+        border-color: var(--black);
+      }
+      .field .input-shell svg {
+        flex-shrink: 0;
+        color: var(--taupe);
+      }
+      .field input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 14px;
+        font-family: inherit;
+        width: 100%;
+        color: var(--ink);
+      }
+      .field input::placeholder {
+        color: var(--taupe-light);
+      }
+      .toggle-pass {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--taupe);
+        display: flex;
+      }
+      .field-error {
+        font-size: 11.5px;
+        color: var(--error);
+      }
+      .field-hint {
+        font-size: 11px;
+        color: var(--taupe-light);
+      }
+
+      .pw-meter {
+        display: flex;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pw-meter span {
+        height: 3px;
+        flex: 1;
+        border-radius: 2px;
+        background: var(--line);
+        transition: background 0.25s var(--ease);
+      }
+
+      .terms-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 12px;
+        color: var(--taupe);
+        line-height: 1.6;
+      }
+      .terms-row input {
+        accent-color: var(--black);
+        width: 14px;
+        height: 14px;
+        margin-top: 3px;
+        flex-shrink: 0;
+      }
+      .terms-row a {
+        color: var(--black);
+        font-weight: 600;
+        border-bottom: 1px solid var(--black);
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 28px 0;
+        color: var(--taupe-light);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+      .social-row {
+        display: flex;
+        gap: 12px;
+      }
+      .btn-social {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        background: var(--white);
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--ink);
+        transition:
+          border-color 0.2s,
+          transform 0.2s var(--ease);
+      }
+      .btn-social:hover {
+        border-color: var(--black);
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 900px) {
+        .auth-shell {
+          grid-template-columns: 1fr;
+        }
+        .auth-media {
+          display: none;
+        }
+        .top-bar-inner {
+          padding: 0 22px;
+        }
+        .auth-form-side {
+          padding: 40px 22px;
+        }
+        .field-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <div class="top-bar-inner">
+        <a href="{% url 'index' %}" class="logo"
+          ><span class="mark">C</span> C-STYLE</a
+        >
+        <a href="{% url 'index' %}" class="back-link">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M19 12H5M11 18l-6-6 6-6" />
+          </svg>
+          Back to Shop
+        </a>
+      </div>
+    </div>
+
+    <div class="auth-shell">
+      <div class="auth-media">
+        <img
+          src="https://picsum.photos/seed/auth-register/900/1200"
+          alt="C-Style styled look"
+        />
+        <div class="auth-media-copy">
+          <p class="eyebrow">Join C-Style</p>
+          <h2>Unlock early access,<br />rewards and your own edit.</h2>
+        </div>
+      </div>
+
+      <div class="auth-form-side">
+        <div class="auth-form-wrap">
+          <p class="eyebrow">Create Account</p>
+          <h1>Sign Up</h1>
+          <p class="sub">
+            Already have an account?
+            <a href="{% url 'user_login' %}">Sign in</a>
+          </p>
+
+          {% if messages %} {% for message in messages %}
+          <div class="alert">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v5M12 16h.01" />
+            </svg>
+            <div>{{ message }}</div>
+          </div>
+          {% endfor %} {% endif %} {% if form.non_field_errors %}
+          <div class="alert">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v5M12 16h.01" />
+            </svg>
+            <div>{{ form.non_field_errors }}</div>
+          </div>
+          {% endif %}
+
+          <form
+            class="auth-form"
+            method="post"
+            action="{% url 'user_register' %}"
+          >
+            {% csrf_token %}
+            <div class="field-row">
+              <div class="field">
+                <label for="id_first_name">First Name</label>
+                <div class="input-shell">
+                  <input
+                    type="text"
+                    id="id_first_name"
+                    name="first_name"
+                    placeholder="Jane"
+                    autocomplete="given-name"
+                    required
+                  />
+                </div>
+                {% if form.first_name.errors %}
+                <div class="field-error">
+                  {{ form.first_name.errors|striptags }}
+                </div>
+                {% endif %}
+              </div>
+              <div class="field">
+                <label for="id_last_name">Last Name</label>
+                <div class="input-shell">
+                  <input
+                    type="text"
+                    id="id_last_name"
+                    name="last_name"
+                    placeholder="Doe"
+                    autocomplete="family-name"
+                    required
+                  />
+                </div>
+                {% if form.last_name.errors %}
+                <div class="field-error">
+                  {{ form.last_name.errors|striptags }}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="id_email">Email Address</label>
+              <div class="input-shell">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="M3 7l9 6 9-6" />
+                </svg>
+                <input
+                  type="email"
+                  id="id_email"
+                  name="email"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+              {% if form.email.errors %}
+              <div class="field-error">{{ form.email.errors|striptags }}</div>
+              {% endif %}
+            </div>
+
+            <div class="field">
+              <label for="id_username">Username</label>
+              <div class="input-shell">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c1.8-4 5-6 8-6s6.2 2 8 6" />
+                </svg>
+                <input
+                  type="text"
+                  id="id_username"
+                  name="username"
+                  placeholder="janedoe"
+                  autocomplete="username"
+                  required
+                />
+              </div>
+              {% if form.username.errors %}
+              <div class="field-error">
+                {{ form.username.errors|striptags }}
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="field">
+              <label for="id_password1">Password</label>
+              <div class="input-shell">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <rect x="4" y="10" width="16" height="10" rx="2" />
+                  <path d="M8 10V7a4 4 0 018 0v3" />
+                </svg>
+                <input
+                  type="password"
+                  id="id_password1"
+                  name="password1"
+                  placeholder="Create a password"
+                  autocomplete="new-password"
+                  required
+                  oninput="updateStrength(this.value)"
+                />
+                <button
+                  type="button"
+                  class="toggle-pass"
+                  aria-label="Show password"
+                  onclick="togglePassword('id_password1', this)"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  >
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+              <div class="pw-meter" id="pwMeter">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              {% if form.password1.errors %}
+              <div class="field-error">
+                {{ form.password1.errors|striptags }}
+              </div>
+              {% else %}
+              <div class="field-hint">
+                Use 8+ characters with a mix of letters, numbers &amp; symbols.
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="field">
+              <label for="id_password2">Confirm Password</label>
+              <div class="input-shell">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <rect x="4" y="10" width="16" height="10" rx="2" />
+                  <path d="M8 10V7a4 4 0 018 0v3" />
+                </svg>
+                <input
+                  type="password"
+                  id="id_password2"
+                  name="password2"
+                  placeholder="Re-enter your password"
+                  autocomplete="new-password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="toggle-pass"
+                  aria-label="Show password"
+                  onclick="togglePassword('id_password2', this)"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  >
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+              {% if form.password2.errors %}
+              <div class="field-error">
+                {{ form.password2.errors|striptags }}
+              </div>
+              {% endif %}
+            </div>
+
+            <label class="terms-row">
+              <input type="checkbox" name="agree_terms" required />
+              <span
+                >I agree to the <a href="#">Terms of Service</a> and
+                <a href="#">Privacy Policy</a>, and I'm happy to receive updates
+                from C-Style.</span
+              >
+            </label>
+
+            <button type="submit" class="btn btn-fill">Create Account</button>
+          </form>
+
+          <div class="divider">or sign up with</div>
+          <div class="social-row">
+            <a href="#" class="btn-social">
+              <svg width="15" height="15" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  d="M21.35 11.1h-9.17v2.92h5.27c-.23 1.4-1.6 4.1-5.27 4.1-3.17 0-5.76-2.62-5.76-5.85s2.59-5.85 5.76-5.85c1.8 0 3.01.77 3.7 1.43l2.52-2.43C16.95 3.65 14.85 2.7 12.18 2.7 6.99 2.7 2.8 6.86 2.8 12s4.19 9.3 9.38 9.3c5.41 0 9-3.8 9-9.15 0-.62-.07-1.08-.15-1.55z"
+                />
+              </svg>
+              Google
+            </a>
+            <a href="#" class="btn-social">
+              <svg width="15" height="15" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  d="M13.5 8.5V6.7c0-.9.6-1.1 1-1.1h2.5V2.2L13.9 2.2c-3 0-3.9 1.9-3.9 4.1v2.2H8v3.4h2v9.9h3.5v-9.9h2.6l.4-3.4h-3z"
+                />
+              </svg>
+              Facebook
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function togglePassword(fieldId, btn) {
+        const input = document.getElementById(fieldId);
+        const isPass = input.type === "password";
+        input.type = isPass ? "text" : "password";
+        btn.setAttribute(
+          "aria-label",
+          isPass ? "Hide password" : "Show password",
+        );
+      }
+
+      function updateStrength(value) {
+        const bars = document.querySelectorAll("#pwMeter span");
+        let score = 0;
+        if (value.length >= 8) score++;
+        if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
+        if (/\d/.test(value)) score++;
+        if (/[^A-Za-z0-9]/.test(value)) score++;
+
+        const colors = ["#e4dece", "#b3392c", "#c98a3a", "#8c8375", "#4c7a5c"];
+        bars.forEach((bar, i) => {
+          bar.style.background = i < score ? colors[score] : "#e4dece";
+        });
+      }
+    </script>
+  </body>
+</html>

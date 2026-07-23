@@ -1,0 +1,372 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ category.category_name }} — Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --cream: #faf6f0;
+        --ink: #2b2620;
+        --ink-soft: #6b6459;
+        --rose: #cba79b;
+        --rose-deep: #a9776a;
+        --sage: #8c9574;
+        --gold: #b08d57;
+        --line: #e8e0d4;
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--cream);
+        color: var(--ink);
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      /* ---------- Breadcrumb ---------- */
+      .breadcrumb {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 22px 32px 0;
+        font-size: 13px;
+        color: var(--ink-soft);
+        letter-spacing: 0.02em;
+      }
+      .breadcrumb a:hover {
+        color: var(--rose-deep);
+      }
+      .breadcrumb .sep {
+        margin: 0 8px;
+        opacity: 0.5;
+      }
+      .breadcrumb .current {
+        color: var(--ink);
+        font-weight: 500;
+      }
+
+      /* ---------- Category hero ---------- */
+      .category-hero {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 18px 32px 40px;
+        border-bottom: 1px solid var(--line);
+      }
+      .category-hero h1 {
+        font-family: "Fraunces", serif;
+        font-weight: 500;
+        font-size: clamp(2.4rem, 5vw, 3.6rem);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .category-hero .count {
+        font-size: 14px;
+        color: var(--ink-soft);
+        letter-spacing: 0.03em;
+      }
+      .category-hero .rule {
+        width: 64px;
+        height: 2px;
+        background: var(--gold);
+        margin-top: 18px;
+        border: none;
+      }
+
+      /* ---------- Layout ---------- */
+      .category-layout {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 32px 80px;
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 48px;
+        align-items: start;
+      }
+
+      /* ---------- Filter sidebar ---------- */
+      .filter-sidebar {
+        position: sticky;
+        top: 24px;
+      }
+      .filter-group {
+        margin-bottom: 32px;
+      }
+      .filter-group h4 {
+        font-family: "Fraunces", serif;
+        font-size: 15px;
+        font-weight: 500;
+        margin: 0 0 14px;
+        color: var(--ink);
+      }
+      .filter-chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 4px;
+        font-size: 14px;
+        color: var(--ink-soft);
+        border-bottom: 1px solid transparent;
+        transition: color 0.15s ease;
+      }
+      .filter-chip .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--line);
+        flex-shrink: 0;
+        transition: background 0.15s ease;
+      }
+      .filter-chip:hover {
+        color: var(--ink);
+      }
+      .filter-chip.active {
+        color: var(--rose-deep);
+        font-weight: 500;
+      }
+      .filter-chip.active .dot {
+        background: var(--rose-deep);
+      }
+
+      .sort-select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        background: var(--white);
+        border-radius: 2px;
+        font-family: "Inter", sans-serif;
+        font-size: 13px;
+        color: var(--ink);
+      }
+
+      /* ---------- Product grid (matches homepage cards) ---------- */
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 30px 24px;
+      }
+
+      .product-card {
+        position: relative;
+      }
+
+      .product-media {
+        position: relative;
+        aspect-ratio: 3 / 4;
+        background: var(--white);
+        border: 1px solid var(--line);
+        overflow: hidden;
+        border-radius: 2px;
+      }
+      .product-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+      .product-card:hover .product-media img {
+        transform: scale(1.04);
+      }
+
+      .wish-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--rose-deep);
+      }
+
+      .quick-add {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 11px;
+        border: none;
+        background: var(--ink);
+        color: var(--white);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(6px);
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease;
+      }
+      .product-card:hover .quick-add {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .product-info {
+        padding: 12px 2px 0;
+      }
+      .product-info .name {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        line-height: 1.35;
+      }
+      .product-info .price {
+        font-size: 14px;
+        color: var(--rose-deep);
+        font-weight: 600;
+      }
+
+      .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 80px 20px;
+        color: var(--ink-soft);
+        font-family: "Fraunces", serif;
+        font-size: 20px;
+      }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width: 780px) {
+        .category-layout {
+          grid-template-columns: 1fr;
+        }
+        .filter-sidebar {
+          position: static;
+          display: flex;
+          gap: 24px;
+          overflow-x: auto;
+          padding-bottom: 12px;
+        }
+        .filter-group {
+          margin-bottom: 0;
+          flex-shrink: 0;
+        }
+      }
+
+      /* accessibility: visible focus ring */
+      a:focus-visible,
+      button:focus-visible,
+      select:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .product-media img,
+        .quick-add {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="breadcrumb">
+      <a href="{% url 'index' %}">Home</a>
+      <span class="sep">/</span>
+      <span class="current">{{ category.category_name }}</span>
+    </nav>
+
+    <section class="category-hero">
+      <h1>{{ category.category_name }}</h1>
+      <div class="count">
+        {{ products|length }} piece{{ products|length|pluralize }}
+      </div>
+      <hr class="rule" />
+    </section>
+
+    <div class="category-layout">
+      <aside class="filter-sidebar">
+        <div class="filter-group">
+          <h4>Shop by category</h4>
+          <a
+            href="{% url 'category_view' category_name='tops' %}"
+            class="filter-chip {% if category.category_name|lower == 'tops' %}active{% endif %}"
+          >
+            <span class="dot"></span> Tops
+          </a>
+          <a
+            href="{% url 'category_view' category_name='dresses' %}"
+            class="filter-chip {% if category.category_name|lower == 'dresses' %}active{% endif %}"
+          >
+            <span class="dot"></span> Dresses
+          </a>
+          <a
+            href="{% url 'category_view' category_name='accessories' %}"
+            class="filter-chip {% if category.category_name|lower == 'accessories' %}active{% endif %}"
+          >
+            <span class="dot"></span> Accessories
+          </a>
+        </div>
+
+        <div class="filter-group">
+          <h4>Sort by</h4>
+          <select class="sort-select" onchange="location.href = this.value">
+            <option value="?sort=recommended">Recommended</option>
+            <option value="?sort=price_low">Price: Low to High</option>
+            <option value="?sort=price_high">Price: High to Low</option>
+          </select>
+        </div>
+      </aside>
+
+      <main class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+          <a
+            href="{% url 'product_detail' product.id %}"
+            style="display: block"
+          >
+            <div class="product-media">
+              {% if product.img %}
+              <img src="{{ product.img.url }}" alt="{{ product.name }}" />
+              {% endif %}
+            </div>
+            <div class="product-info">
+              <div class="name">{{ product.name }}</div>
+              <div class="price">₹{{ product.price }}</div>
+            </div>
+          </a>
+          <button
+            class="wish-btn"
+            aria-label="Add {{ product.name }} to wishlist"
+            onclick="event.preventDefault()"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 20s-7-4.35-9.5-8.8C.7 7.9 2 4 5.6 3.4 8 3 10.3 4.4 12 7c1.7-2.6 4-4 6.4-3.6C22 4 23.3 7.9 21.5 11.2 19 15.65 12 20 12 20z"
+              />
+            </svg>
+          </button>
+          <button class="quick-add" onclick="event.preventDefault()">
+            Add to Cart
+          </button>
+        </div>
+        {% empty %}
+        <p class="empty-state">Nothing here yet — check back soon.</p>
+        {% endfor %}
+      </main>
+    </div>
+  </body>
+</html>
