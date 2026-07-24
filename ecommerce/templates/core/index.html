@@ -1552,7 +1552,7 @@
           </div>
           <div class="hero-media">
             <img
-              src="\media\images\hero-banner.jpg"
+              src="{% static 'images/hero-banner.jpg' %}"
               alt="Two models wearing this season's RUNE layered outfits"
             />
           </div>
@@ -1634,6 +1634,7 @@
           </div>
         </div>
       </section>
+      
 
       <!-- Categories -->
       <section class="section" id="women">
@@ -2017,37 +2018,13 @@
       document.getElementById("year").textContent = new Date().getFullYear();
 
       /* ---------- Data ---------- */
-      const categories = [
-        {
-          name: "Tops",
-          img: "/media/images/tops.png",
-          href: "/category/tops/",
-        },
-        {
-          name: "Dresses",
-          img: "/media/images/Dresses.png",
-          href: "/category/dresses/",
-        },
-        {
-          name: "Accessories",
-          img: "/media/images/Accessories.png",
-          href: "/category/accessories/",
-        },
-        {
-          name: "Men",
-          img: "/media/images/Men.png",
-          href: "/category/men/",
-        },
-        {
-          name: "Women",
-          img: "/media/images/Women.png",
-          href: "/category/women/",
-        },
-        {
-          name: "Shirts",
-          img: "/media/images/Shirts.png",
-          href: "/category/shirts/",
-        },
+           const categories = [
+        { name: "Tops", img: "{% static 'images/tops.png' %}", href: "/category/tops/" },
+        { name: "Dresses", img: "{% static 'images/Dresses.png' %}", href: "/category/dresses/" },
+        { name: "Accessories", img: "{% static 'images/Accessories.png' %}", href: "/category/accessories/" },
+        { name: "Men", img: "{% static 'images/Men.png' %}", href: "/category/men/" },
+        { name: "Women", img: "{% static 'images/Women.png' %}", href: "/category/women/" },
+        { name: "Shirts", img: "{% static 'images/Shirts.png' %}", href: "/category/shirts/" },
       ];
 
       const collections = [
